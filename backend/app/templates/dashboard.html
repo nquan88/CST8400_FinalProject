@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – ReadTrack{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Dashboard</h1>
+  <p>Your reading activity at a glance</p>
+</div>
+
+<!-- Stat cards -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="label">Total Sessions</div>
+    <div class="value" id="stat-sessions">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Pages Read</div>
+    <div class="value" id="stat-pages">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Hours Read</div>
+    <div class="value" id="stat-hours">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Avg Session</div>
+    <div class="value" id="stat-avg">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Current Streak</div>
+    <div class="value" id="stat-streak">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Consistency (30d)</div>
+    <div class="value" id="stat-consist">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Best Time</div>
+    <div class="value" style="font-size:20px" id="stat-pref">—</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Sessions / Week</div>
+    <div class="value" id="stat-freq">—</div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="charts-grid">
+  <div class="chart-card" style="grid-column: span 2">
+    <h3>Reading Activity (Last 30 Days)</h3>
+    <canvas id="chart-activity"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Sessions by Day of Week</h3>
+    <canvas id="chart-dow"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Mood Distribution</h3>
+    <canvas id="chart-mood"></canvas>
+  </div>
+  <div class="chart-card">
+    <h3>Genre Distribution</h3>
+    <canvas id="chart-genre"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

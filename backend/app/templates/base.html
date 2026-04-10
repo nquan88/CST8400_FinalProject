@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Reading Tracker{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span>📚</span> ReadTrack
+    </div>
+    <nav>
+      <a href="{{ url_for('views.dashboard') }}"
+         {% if request.endpoint == 'views.dashboard' %}class="active"{% endif %}>
+        📊 Dashboard
+      </a>
+      <a href="{{ url_for('views.log_session') }}"
+         {% if request.endpoint == 'views.log_session' %}class="active"{% endif %}>
+        ✍️ Log Session
+      </a>
+      <a href="{{ url_for('views.books') }}"
+         {% if request.endpoint == 'views.books' %}class="active"{% endif %}>
+        📖 My Books
+      </a>
+      <a href="{{ url_for('views.insights') }}"
+         {% if request.endpoint == 'views.insights' %}class="active"{% endif %}>
+        🧠 Insights
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" id="logout-btn">Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+{% block scripts %}{% endblock %}
+<script>
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await api.post('/api/auth/logout');
+    window.location.href = '/login';
+  });
+</script>
+</body>
+</html>

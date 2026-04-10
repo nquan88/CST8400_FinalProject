@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Log Session – ReadTrack{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Log Reading Session</h1>
+  <p>Record what you read today</p>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1.4fr;gap:24px;align-items:start">
+
+  <!-- Form -->
+  <div class="card">
+    <div id="session-alert" class="alert"></div>
+
+    <form id="session-form">
+      <div class="form-group">
+        <label for="f-book">Book <span style="color:var(--danger)">*</span></label>
+        <select id="f-book" class="form-control" required>
+          <option value="">Loading…</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="f-date">Date <span style="color:var(--danger)">*</span></label>
+        <input type="date" id="f-date" class="form-control" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-start">Start Time</label>
+          <input type="time" id="f-start" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="f-end">End Time</label>
+          <input type="time" id="f-end" class="form-control">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-duration">Duration (minutes) <span style="color:var(--danger)">*</span></label>
+          <input type="number" id="f-duration" class="form-control" placeholder="e.g. 30" min="1" required>
+        </div>
+        <div class="form-group">
+          <label for="f-pages">Pages Read</label>
+          <input type="number" id="f-pages" class="form-control" placeholder="e.g. 25" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="f-mood">Mood</label>
+        <select id="f-mood" class="form-control">
+          <option value="focused">🎯 Focused</option>
+          <option value="energized">⚡ Energized</option>
+          <option value="distracted">😵 Distracted</option>
+          <option value="tired">😴 Tired</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="f-notes">Notes</label>
+        <textarea id="f-notes" class="form-control" placeholder="Any thoughts on this session? (optional)"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
+        Log Session
+      </button>
+    </form>
+  </div>
+
+  <!-- Recent sessions -->
+  <div class="card">
+    <div class="card-title">Recent Sessions</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Book</th>
+            <th>Duration</th>
+            <th>Pages</th>
+            <th>Mood</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="sessions-tbody">
+          <tr><td colspan="6"><div class="spinner"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/log-session.js') }}"></script>
+{% endblock %}
