@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}My Books – ReadTrack{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>My Books</h1>
+  <p>Manage your reading list</p>
+</div>
+
+<!-- Toolbar -->
+<div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+  <button class="btn btn-primary" onclick="openAdd()">+ Add Book</button>
+  <input type="text" id="search-input" class="form-control" placeholder="Search by title or author…" style="max-width:260px">
+  <select id="filter-status" class="form-control" style="max-width:160px">
+    <option value="">All statuses</option>
+    <option value="to_read">To Read</option>
+    <option value="reading">Reading</option>
+    <option value="completed">Completed</option>
+    <option value="abandoned">Abandoned</option>
+  </select>
+</div>
+
+<!-- Table -->
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Genre</th>
+          <th>Difficulty</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="books-tbody">
+        <tr><td colspan="6"><div class="spinner"></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Add / Edit Modal -->
+<div class="modal-backdrop" id="book-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Add Book</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div id="book-alert" class="alert"></div>
+
+    <form id="book-form">
+      <div class="form-group">
+        <label for="f-title">Title <span style="color:var(--danger)">*</span></label>
+        <input type="text" id="f-title" class="form-control" placeholder="Book title" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-author">Author</label>
+          <input type="text" id="f-author" class="form-control" placeholder="Author name">
+        </div>
+        <div class="form-group">
+          <label for="f-genre">Genre</label>
+          <input type="text" id="f-genre" class="form-control" placeholder="e.g. Fiction, Science">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-difficulty">Difficulty</label>
+          <select id="f-difficulty" class="form-control">
+            <option value="easy">Easy</option>
+            <option value="medium" selected>Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-pages">Total Pages</label>
+          <input type="number" id="f-pages" class="form-control" placeholder="e.g. 320" min="1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="f-status">Status</label>
+        <select id="f-status" class="form-control">
+          <option value="to_read">To Read</option>
+          <option value="reading">Reading</option>
+          <option value="completed">Completed</option>
+          <option value="abandoned">Abandoned</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+        <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/books.js') }}"></script>
+{% endblock %}
