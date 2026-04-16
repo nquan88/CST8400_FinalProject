@@ -5,7 +5,11 @@ async function loadInsights() {
   const result = await api.get('/api/insights/');
   if (!result) return;
 
+<<<<<<< HEAD
   const insights = result.insights || [];
+=======
+  const insights = result.insights;
+>>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0
 
   if (!insights.length) {
     container.innerHTML = `
@@ -16,6 +20,7 @@ async function loadInsights() {
     return;
   }
 
+<<<<<<< HEAD
   container.innerHTML = `
     <div class="insights-grid">
       ${insights.map(i => `
@@ -89,6 +94,18 @@ async function loadAnalytics() {
       </div>
     </div>
   `;
+=======
+  container.innerHTML = `<div class="insights-grid">
+    ${insights.map(i => `
+      <div class="insight-card ${i.type}">
+        <div class="insight-icon">${insightIcon(i.icon)}</div>
+        <div class="insight-body">
+          <h4>${escHtml(i.title)}</h4>
+          <p>${escHtml(i.message)}</p>
+        </div>
+      </div>`).join('')}
+  </div>`;
+>>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0
 }
 
 function escHtml(str) {
@@ -97,7 +114,11 @@ function escHtml(str) {
   return d.innerHTML;
 }
 
+<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', async () => {
   await loadInsights();
   await loadAnalytics();
 });
+=======
+document.addEventListener('DOMContentLoaded', loadInsights);
+>>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0

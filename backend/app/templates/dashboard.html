@@ -45,6 +45,15 @@
     <div class="label">Sessions / Week</div>
     <div class="value" id="stat-freq">—</div>
   </div>
+<<<<<<< HEAD
+=======
+  <div class="stat-card">
+  <div class="label">Goal Progress</div>
+  <div class="value">
+    {{ data.goal_met_days }} days met / {{ data.goal_missed_days }} missed
+  </div>
+</div>
+>>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0
 </div>
 
 <!-- Charts -->
@@ -65,9 +74,43 @@
     <h3>Genre Distribution</h3>
     <canvas id="chart-genre"></canvas>
   </div>
+<<<<<<< HEAD
+=======
+  <div class="chart-card">
+  <h3>Goal vs Reading (Last Days)</h3>
+  <canvas id="chart-goal"></canvas>
+</div>
+<div class="chart-card">
+    <h3>🎯 Daily Reading Goal</h3>
+
+    <form method="POST" action="/set-goal">
+        <input 
+            type="number" 
+            name="minutes" 
+            value="{{ goal_minutes }}" 
+            min="1"
+            style="padding: 8px; width: 100px;"
+        >
+        <span>minutes</span>
+
+        <button type="submit" style="margin-left: 10px;">
+            Save
+        </button>
+    </form>
+</div>
+>>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0
 </div>
 {% endblock %}
 
 {% block scripts %}
+<<<<<<< HEAD
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+=======
+<script>
+    const goalData = {{ data.goal_data | default([]) | tojson | safe }};
+</script>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+>>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0
 {% endblock %}

@@ -132,5 +132,32 @@ function renderGenreChart(data) {
     },
   });
 }
+<<<<<<< HEAD
 
+=======
+document.addEventListener('DOMContentLoaded', function () {
+
+    const labels = goalData.map(d => d.date);
+    const actual = goalData.map(d => d.actual);
+    const goal = goalData.map(d => d.goal);
+
+    new Chart(document.getElementById('chart-goal'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Actual Reading',
+                    data: actual,
+                },
+                {
+                    label: 'Goal',
+                    data: goal,
+                }
+            ]
+        }
+    });
+
+});
+>>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0
 document.addEventListener('DOMContentLoaded', loadDashboard);
