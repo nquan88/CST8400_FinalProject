@@ -8,7 +8,7 @@ def generate_insights_via_hf(metrics, timeout=30):
     Returns a Python list of insight dicts on success. Raises on failure.
     """
     HF_API = os.getenv('HF_API_KEY')
-    HF_MODEL = os.getenv('HF_MODEL', 'google/flan-t5-small')
+    HF_MODEL = os.getenv('HF_MODEL', 'google/gemini-2.0-flash')  # default to a strong open model if not set
 
     if not HF_API:
         raise RuntimeError('HF_API_KEY not set')
