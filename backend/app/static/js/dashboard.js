@@ -132,5 +132,28 @@ function renderGenreChart(data) {
     },
   });
 }
+document.addEventListener('DOMContentLoaded', function () {
 
+    const labels = goalData.map(d => d.date);
+    const actual = goalData.map(d => d.actual);
+    const goal = goalData.map(d => d.goal);
+
+    new Chart(document.getElementById('chart-goal'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Actual Reading',
+                    data: actual,
+                },
+                {
+                    label: 'Goal',
+                    data: goal,
+                }
+            ]
+        }
+    });
+
+});
 document.addEventListener('DOMContentLoaded', loadDashboard);
