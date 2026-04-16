@@ -1,4 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, session
+from app.services.analytics import compute_analytics
+from app import db 
+from app.models.goal import Goal
+from flask import request, redirect, url_for, session
 
 views_bp = Blueprint('views', __name__)
 
@@ -11,8 +15,15 @@ def logged_in():
 def dashboard():
     if not logged_in():
         return redirect(url_for('views.login'))
-    return render_template('dashboard.html')
 
+    user_id = session['user_id']
+    data = compute_analytics(user_id)
+    print("DATA:", data)
+
+    goal = Goal.query.filter_by(user_id=user_id).first()
+    goal_minutes = goal.daily_minutes if goal else 30
+
+    return render_template('dashboard.html', data=data, goal_minutes=goal_minutes)
 
 @views_bp.route('/login')
 def login():
@@ -27,6 +38,24 @@ def register():
         return redirect(url_for('views.dashboard'))
     return render_template('register.html')
 
+
+
+
+@views_bp.route('/set-goal', methods=['POST'])
+def set_goal():
+    user_id = session['user_id']
+    minutes = int(request.form['minutes'])
+
+    goal = Goal.query.filter_by(user_id=user_id).first()
+
+    if goal:
+        goal.daily_minutes = minutes
+    else:
+        goal = Goal(user_id=user_id, daily_minutes=minutes)
+        db.session.add(goal)
+
+    db.session.commit()
+    return redirect(url_for('views.dashboard'))
 
 @views_bp.route('/books')
 def books():

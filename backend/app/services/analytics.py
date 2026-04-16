@@ -2,6 +2,7 @@ from collections import Counter
 import pandas as pd
 from app.models.reading_session import ReadingSession
 from app.models.book import Book
+from app.models.goal import Goal
 
 
 def time_of_day(hour):
@@ -93,6 +94,28 @@ def compute_analytics(user_id):
     recent_grp.columns = ['date', 'duration_minutes']
     sessions_last_30 = recent_grp.to_dict('records')
 
+    # GOAL TRACKING
+    goal = Goal.query.filter_by(user_id=user_id).first()
+    goal_minutes = goal.daily_minutes if goal else 30
+
+    daily_totals = (df
+                .groupby(df['session_date'].dt.strftime('%Y-%m-%d'))['duration_minutes']
+                .sum()
+                .reset_index())
+
+    daily_totals.columns = ['date', 'minutes']
+
+    goal_data = []
+    for _, row in daily_totals.iterrows():
+                goal_data.append({
+                    'date': row['date'],
+                    'actual': row['minutes'],
+                    'goal': goal_minutes
+                })
+    goal_met_days = sum(1 for d in goal_data if d['actual'] >= d['goal'])
+    goal_missed_days = len(goal_data) - goal_met_days      
+          
+
     # Reading streak (consecutive days up to today)
     all_dates = sorted(df['session_date'].dt.normalize().unique(), reverse=True)
     streak = 0
@@ -104,17 +127,27 @@ def compute_analytics(user_id):
         else:
             break
 
+    print("goal_data:", goal_data)
+    print("goal_minutes:", goal_minutes)
+    print("goal_met_days:", goal_met_days)
+    print("goal_missed_days:", goal_missed_days)
+    
     return {
-        'total_sessions':            total_sessions,
-        'total_minutes':             total_minutes,
-        'total_pages':               total_pages,
-        'avg_duration_minutes':      avg_duration,
-        'preferred_reading_time':    preferred_time,
-        'reading_frequency_per_week': freq_per_week,
-        'consistency_score':         consistency_score,
-        'mood_distribution':         mood_dist,
-        'genre_distribution':        genre_dist,
-        'sessions_by_day_of_week':   sessions_by_dow,
-        'sessions_last_30_days':     sessions_last_30,
-        'reading_streak':            streak,
-    }
+    'total_sessions': total_sessions,
+    'total_minutes': total_minutes,
+    'total_pages': total_pages,
+    'avg_duration_minutes': avg_duration,
+    'preferred_reading_time': preferred_time,
+    'reading_frequency_per_week': freq_per_week,
+    'consistency_score': consistency_score,
+    'mood_distribution': mood_dist,
+    'genre_distribution': genre_dist,
+    'sessions_by_day_of_week': sessions_by_dow,
+    'sessions_last_30_days': sessions_last_30,
+    'reading_streak': streak,
+
+    'goal_data': goal_data,
+    'goal_minutes': goal_minutes,
+    'goal_met_days': goal_met_days,
+    'goal_missed_days': goal_missed_days,
+}
