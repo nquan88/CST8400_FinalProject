@@ -10,6 +10,11 @@ def create_app():
 
     db.init_app(app)
 
+    from app.models.user import User
+    from app.models.book import Book
+    from app.models.reading_session import ReadingSession
+    from app.models.goal import Goal
+
     from app.routes.auth import auth_bp
     from app.routes.books import books_bp
     from app.routes.sessions import sessions_bp

@@ -334,9 +334,9 @@ tbody tr:hover td { background: #f8fafc; }
   gap: 14px;
 }
 
-.insight-card.success { border-left-color: var(--success); }
-.insight-card.warning { border-left-color: var(--warning); }
-.insight-card.info    { border-left-color: var(--info);    }
+.insight-card.success { border-left-color: #10b981; }
+.insight-card.warning { border-left-color: #f59e0b; }
+.insight-card.info    { border-left-color: #3b82f6; }
 .insight-card.tip     { border-left-color: var(--accent);  }
 .insight-card.welcome { border-left-color: var(--primary); }
 
@@ -346,8 +346,8 @@ tbody tr:hover td { background: #f8fafc; }
   padding-top: 2px;
 }
 
-.insight-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-.insight-body p  { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.insight-body h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px;  color: #6b7280; }
+.insight-body p  { font-size: 18px; color: var(--text-muted); line-height: 1.5;  font-weight: 600; margin: 4px 0 0;}
 
 /* ── Auth pages ──────────────────────────────────────────────────────────── */
 .auth-page {
