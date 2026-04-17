@@ -2,46 +2,51 @@ import os
 import json
 import requests
 
-def generate_insights_via_hf(metrics, timeout=30):
-    """Call Hugging Face Inference API to turn analytics into a JSON list of insights.
 
-    Returns a Python list of insight dicts on success. Raises on failure.
-    """
-    HF_API = os.getenv('HF_API_KEY')
-    HF_MODEL = os.getenv('HF_MODEL', 'google/flan-t5-small')
+def generate_insights_via_gemini(metrics, timeout=30):
+    api_key = os.getenv('GEMINI_API_KEY')
+    if not api_key:
+        raise RuntimeError('GEMINI_API_KEY not set')
 
-    if not HF_API:
-        raise RuntimeError('HF_API_KEY not set')
-    prompt = (
-        "You are an assistant that converts reading analytics into a JSON array.\n"
-        "Each item must be an object with: type, icon, title, message.\n"
-        "Return only valid JSON (a single array).\n\n"
-        "Input metrics (JSON):\n" + json.dumps(metrics, default=str)
+    model = os.getenv('GEMINI_MODEL', 'gemini-2.5-flash')
+    url = (
+        f'https://generativelanguage.googleapis.com/v1beta/models/'
+        f'{model}:generateContent?key={api_key}'
     )
 
-    headers = {'Authorization': f'Bearer {HF_API}'}
-    payload = {'inputs': prompt, 'options': {'wait_for_model': True}}
-    url = f'https://api-inference.huggingface.co/models/{HF_MODEL}'
+    prompt = (
+        "You are an assistant that converts reading analytics into a JSON array of insight cards.\n"
+        "Return ONLY a valid JSON array — no markdown, no explanation, just the raw JSON.\n"
+        "Each item must be an object with exactly these keys:\n"
+        "  type   (one of: success, info, warning, tip)\n"
+        "  icon   (one of: fire, trophy, bolt, bullseye, clock, lightbulb, chart-line,\n"
+        "          exclamation-triangle, sun, cloud-sun, moon, star, layer-group, compass,\n"
+        "          calendar-alt, book)\n"
+        "  title  (short heading, max 8 words)\n"
+        "  message (one or two sentences of actionable advice)\n\n"
+        "Reading analytics:\n" + json.dumps(metrics, default=str)
+    )
 
-    resp = requests.post(url, headers=headers, json=payload, timeout=timeout)
+    payload = {
+        'contents': [{'parts': [{'text': prompt}]}],
+        'generationConfig': {
+            'temperature': 0.4,
+            'maxOutputTokens': 1024,
+        },
+    }
+
+    resp = requests.post(url, json=payload, timeout=timeout)
     resp.raise_for_status()
 
-    # Best-effort: many HF endpoints return a JSON list with 'generated_text'
-    try:
-        body = resp.json()
-        if isinstance(body, list) and body and isinstance(body[0], dict) and 'generated_text' in body[0]:
-            text = body[0]['generated_text']
-        elif isinstance(body, str):
-            text = body
-        else:
-            # fallback to raw text
-            text = resp.text
-    except ValueError:
-        text = resp.text
+    body = resp.json()
+    text = body['candidates'][0]['content']['parts'][0]['text'].strip()
 
-    # Extract JSON array from model output
+    if text.startswith('```'):
+        text = text.split('\n', 1)[-1]
+        text = text.rsplit('```', 1)[0]
+
     start = text.find('[')
     if start == -1:
         raise ValueError('Model did not return a JSON array')
-    json_text = text[start:]
-    return json.loads(json_text)
+
+    return json.loads(text[start:])

@@ -14,10 +14,7 @@ def get_insights():
     uid = current_user_id()
     if not uid:
         return jsonify({'error': 'Not authenticated'}), 401
-
-    return jsonify({
-        'insights': generate_insights(uid)
-    }), 200
+    return jsonify({'insights': generate_insights(uid)}), 200
 
 
 @insights_bp.route('/analytics', methods=['GET'])
@@ -25,7 +22,4 @@ def get_analytics():
     uid = current_user_id()
     if not uid:
         return jsonify({'error': 'Not authenticated'}), 401
-
-    return jsonify({
-        'analytics': compute_analytics(uid)
-    }), 200
+    return jsonify({'analytics': compute_analytics(uid)}), 200

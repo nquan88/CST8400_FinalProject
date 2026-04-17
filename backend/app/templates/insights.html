@@ -4,17 +4,38 @@
 {% block content %}
 <div class="page-header">
   <h1>AI Insights</h1>
-  <p>Personalized suggestions based on your reading behavior</p>
+  <p>Personalized suggestions powered by Gemini</p>
 </div>
 
-<h2>Insight Cards</h2>
-<div id="insights-container">
-  <div class="spinner"></div>
+<!-- AI Ask Section -->
+<div class="ai-ask-section">
+  <div class="ai-ask-card">
+    <div class="ai-ask-icon">🤖</div>
+    <div class="ai-ask-body">
+      <h2>Ask AI for Insights</h2>
+      <p>Gemini will analyse your reading data and give you personalised recommendations.</p>
+      <button id="ask-ai-btn" class="btn btn-primary btn-lg" onclick="askAI()">
+        ✨ Generate AI Insights
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Result area (hidden until button clicked) -->
+<div id="ai-result" style="display:none;">
+  <div class="section-title">
+    <h2>Insight Cards</h2>
+    <span class="model-badge">Gemini 2.5 Flash</span>
+  </div>
+  <div id="insights-container"></div>
 </div>
 
 <hr style="margin: 2rem 0;">
 
-<h2>Analytics Summary</h2>
+<!-- Analytics Summary -->
+<div class="section-title">
+  <h2>Analytics Summary</h2>
+</div>
 <div id="analytics-container">
   <div class="spinner"></div>
 </div>
