@@ -132,9 +132,6 @@ function renderGenreChart(data) {
     },
   });
 }
-<<<<<<< HEAD
-
-=======
 document.addEventListener('DOMContentLoaded', function () {
 
     const labels = goalData.map(d => d.date);
@@ -159,5 +156,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
->>>>>>> 47582d5b5ef8a842817fcb1679ea1afc4b5818a0
 document.addEventListener('DOMContentLoaded', loadDashboard);
